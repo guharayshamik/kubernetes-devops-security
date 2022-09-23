@@ -30,7 +30,7 @@ pipeline {
         }   
         stage('Kube deployment - dev') {
             steps {
-              withKubeConfig([credentialsId: "kubecconfig"]) {
+              withKubeConfig([credentialsId: "kubeconfig"]) {
                 sh "sed -i 's#replace#shguhara/numeric-app:${GIT_COMMIT}#g' k8s_deployment_service.yaml"
                 sh "kubectl apply -f k8s_deployment_service.yaml"
             }
