@@ -19,6 +19,11 @@ pipeline {
               }
             }
         }
+        stage('SonarQube test') {
+           steps {
+             sh 'mvn clean verify sonar:sonar -Dsonar.projectKey=jenkins-pipeline -Dsonar.host.url=http://devsecops-demo-sre.eastus.cloudapp.azure.com:9000 -Dsonar.login=sqp_5d90747570097a93bc30fbf01d8094f5d358a487'
+           }
+        }    
         stage('Docker Hub stage ') {
             steps {
               withDockerRegistry([credentialsId: "docker-hub", url: ""]) {
@@ -28,11 +33,6 @@ pipeline {
             }
           }
         }
-        stage('SonarQube test') {
-           steps {
-             sh 'mvn clean verify sonar:sonar -Dsonar.projectKey=jenkins-pipeline -Dsonar.host.url=http://devsecops-demo-sre.eastus.cloudapp.azure.com:9000 -Dsonar.login=sqp_5d90747570097a93bc30fbf01d8094f5d358a487'
-           }
-        }    
         stage('Kube deployment - dev') {
             steps {
               withKubeConfig([credentialsId: "kubeconfig"]) {
