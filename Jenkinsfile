@@ -40,23 +40,23 @@ pipeline {
         //}
          stage('Vulnerability Check - Docker') {
             steps {
-              parallel{
-                "Dependecy Scan": {
+              parallel(
+                "Dependency Scan": {
                    sh "mvn dependency-check:check"
                 },
                 "Trivy check": {
                   sh "bash trivy.sh"
                 }
-              } 
+              )
             }
-            
+         } 
 
             // post{
             //   always{
             //     dependencyCheckPublisher pattern: 'target/dependency-check-report.xml'
             //   }
             // }
-          }
+          
         stage('Docker Hub stage ') {
             steps {
               withDockerRegistry([credentialsId: "docker-hub", url: ""]) {
