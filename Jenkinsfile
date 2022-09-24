@@ -47,7 +47,7 @@ pipeline {
                 "Trivy check": {
                   sh "bash trivy.sh"
                 },
-                "OPA Test:"{
+                "OPA Tests":{
                   sh 'docker run --rm -v $(pwd):/project openpolicyagent/contest test --policy policy.rigo Dockerfile'
                 }
               )
