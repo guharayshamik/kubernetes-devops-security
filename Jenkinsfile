@@ -38,10 +38,19 @@ pipeline {
         //     }
         //  }
         //}
-         stage('Dependecy Vulnerability-Check') {
+         stage('Vulnerability Check - Docker') {
             steps {
-              sh "mvn dependency-check:check"
+              parallel{
+                "Dependecy Scan": {
+                   sh "mvn dependency-check:check"
+                },
+                "Trivy check": {
+                  sh "bash trivy.sh"
+                }
+              } 
             }
+            
+
             // post{
             //   always{
             //     dependencyCheckPublisher pattern: 'target/dependency-check-report.xml'
