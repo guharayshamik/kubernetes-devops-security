@@ -12,12 +12,12 @@ pipeline {
             steps {
               sh "mvn test"
             }
-            post {
-              always {
-                junit 'target/surefire-reports/*.xml'
-                jacoco execPattern: 'target/jacoco.exec'
-              }
-            }
+            // post {
+            //   always {
+            //     junit 'target/surefire-reports/*.xml'
+            //     jacoco execPattern: 'target/jacoco.exec'
+            //   }
+            // }
         }
         stage('SonarQube test') {
            steps {
@@ -42,11 +42,11 @@ pipeline {
             steps {
               sh "mvn dependency-check:check"
             }
-            post{
-              always{
-                dependencyCheckPublisher pattern: 'target/dependency-check-report.xml'
-              }
-            }
+            // post{
+            //   always{
+            //     dependencyCheckPublisher pattern: 'target/dependency-check-report.xml'
+            //   }
+            // }
           }
         stage('Docker Hub stage ') {
             steps {
@@ -65,5 +65,12 @@ pipeline {
             }
           }
         } 
+    }
+    post{
+      always{
+        junit 'target/surefire-reports/*.xml'
+        jacoco execPattern: 'target/jacoco.exec'
+        dependencyCheckPublisher pattern: 'target/dependency-check-report.xml'
+      }
     }
 }
