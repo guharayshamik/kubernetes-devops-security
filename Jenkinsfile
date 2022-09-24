@@ -24,20 +24,30 @@ pipeline {
              sh 'mvn clean verify sonar:sonar -Dsonar.projectKey=jenkins-pipeline -Dsonar.host.url=http://devsecops-demo-sre.eastus.cloudapp.azure.com:9000 -Dsonar.login=sqp_5d90747570097a93bc30fbf01d8094f5d358a487'
             }
          }    
-        stage('SonarQube - SAST') {
+        // stage('SonarQube - SAST') {
+        //     steps {
+        //         withSonarQubeEnv('SonarQube') { 
+        //           sh "mvn sonar:sonar -Dsonar.projectKey=jenkins-pipeline -Dsonar.host.url=http://devsecops-demo-sre.eastus.cloudapp.azure.com:9000"
+        //         }
+        //         timeout(time: 2, unit: 'MINUTES') {
+        //           script {
+        //             // Parameter indicates whether to set pipeline to UNSTABLE if Quality Gate fails
+        //             // true = set pipeline to UNSTABLE, false = don't 
+        //             waitForQualityGate abortPipeline: true
+        //         }
+        //     }
+        //  }
+        //}
+         stage('Dependecy Vulnerability Check ') {
             steps {
-                withSonarQubeEnv('SonarQube') { 
-                  sh "mvn sonar:sonar -Dsonar.projectKey=jenkins-pipeline -Dsonar.host.url=http://devsecops-demo-sre.eastus.cloudapp.azure.com:9000"
-                }
-                timeout(time: 2, unit: 'MINUTES') {
-                  script {
-                    // Parameter indicates whether to set pipeline to UNSTABLE if Quality Gate fails
-                    // true = set pipeline to UNSTABLE, false = don't 
-                    waitForQualityGate abortPipeline: true
-                }
+              sh 'mvn dependency-check:check'
             }
-         }
-        }
+            post{
+              always{
+                dependencyCheckPublisher pattern: 'target/dependency-check-report.xml'
+              }
+            }
+          }
         stage('Docker Hub stage ') {
             steps {
               withDockerRegistry([credentialsId: "docker-hub", url: ""]) {
