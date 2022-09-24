@@ -38,7 +38,7 @@ pipeline {
         //     }
         //  }
         //}
-         stage('Dependecy Vulnerability Check ') {
+         stage('Dependecy Vulnerability-Check') {
             steps {
               sh 'mvn dependency-check:check'
             }
