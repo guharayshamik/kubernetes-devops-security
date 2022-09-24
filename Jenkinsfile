@@ -27,7 +27,7 @@ pipeline {
         stage('SonarQube - SAST') {
             steps {
                 withSonarQubeEnv('SonarQube') { 
-                  sh "mvn sonar:sonar -Dsonar.projectKey=jenkins-pipeline -Dsonar.host.url=http://devsecops-demo-sre.eastus.cloudapp.azure.com:9000 -Dsonar.login=sqp_5d90747570097a93bc30fbf01d8094f5d358a487"
+                  sh "mvn sonar:sonar -Dsonar.projectKey=jenkins-pipeline -Dsonar.host.url=http://devsecops-demo-sre.eastus.cloudapp.azure.com:9000"
                 }
                 timeout(time: 2, unit: 'MINUTES') {
                   script {
